@@ -11,7 +11,7 @@ Vec compute_force_vector(double t,
     double Le = sys.Le;
     Vec F = vec_zeros(ndof);
 
-    // --- Distributed loads via 4-point Gauss quadrature ---
+    // Distributed loads via 4-point Gauss quadrature
     // Gauss points on [-1,1], mapped to [0,1] parametric space
     const int NGP = 4;
     const double gp[NGP] = {0.0694318, 0.3300095, 0.6699905, 0.9305682};
@@ -35,9 +35,9 @@ Vec compute_force_vector(double t,
 
             // Hermite shape functions for transverse (v)
             // N1 = 1 - 3xi^2 + 2xi^3
-            // N2 = xi*Le*(1 - 2xi + xi^2)  -- actually: Le*(xi - 2xi^2 + xi^3)
+            // N2 = xi*Le*(1 - 2xi + xi^2) 
             // N3 = 3xi^2 - 2xi^3
-            // N4 = xi*Le*(xi^2 - xi)        -- Le*(xi^2 - xi^3) ... sign convention below
+            // N4 = xi*Le*(xi^2 - xi)    
             double xi2 = xi*xi, xi3 = xi2*xi;
             double H1 =  1.0 - 3.0*xi2 + 2.0*xi3;
             double H2 =  Le  * (xi - 2.0*xi2 + xi3);
