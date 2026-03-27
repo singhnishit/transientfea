@@ -19,7 +19,7 @@ void write_results(const std::vector<SimFrame>& frames,
     int n_elem  = cfg.n_elem;
     int n_frames = frames.size();
 
-    // ---- deflection.csv ----
+    // deflection.csv
     // rows = frames, columns = nodes: t, v0, v1, ..., v_{n_nodes-1}
     {
         auto f = open_file(out_dir + "/deflection.csv");
@@ -34,7 +34,7 @@ void write_results(const std::vector<SimFrame>& frames,
         std::cout << "[output] wrote " << out_dir << "/deflection.csv\n";
     }
 
-    // ---- axial.csv ----
+    // axial.csv
     {
         auto f = open_file(out_dir + "/axial.csv");
         f << "t";
@@ -48,7 +48,7 @@ void write_results(const std::vector<SimFrame>& frames,
         std::cout << "[output] wrote " << out_dir << "/axial.csv\n";
     }
 
-    // ---- stress.csv ----
+    // stress.csv
     {
         auto f = open_file(out_dir + "/stress.csv");
         f << "t";
@@ -62,7 +62,7 @@ void write_results(const std::vector<SimFrame>& frames,
         std::cout << "[output] wrote " << out_dir << "/stress.csv\n";
     }
 
-    // ---- metadata.csv ----
+    // metadata.csv
     {
         auto f = open_file(out_dir + "/metadata.csv");
         f << std::defaultfloat;
