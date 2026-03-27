@@ -1,0 +1,12 @@
+key,value
+L,5
+n_elem,20
+n_nodes,21
+n_frames,251
+Le,0.25
+E,2e+11
+I,8e-05
+A,0.006
+rho,7850
+t_start,0
+t_end,2
