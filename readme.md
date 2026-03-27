@@ -19,7 +19,7 @@ Navigate to `make_beam()` in `src/main.cpp` :
 BeamConfig make_beam() {
     BeamConfig cfg;
     cfg.L      = 5.0;       // total beam length in metres
-    cfg.n_elem = 20;        // number of finite elements — more = more accurate, slower
+    cfg.n_elem = 20;        // number of finite elements
     cfg.E      = 200e9;     // Young's modulus in Pascals  (200e9 = 200 GPa = structural steel)
     cfg.I      = 8000e-8;   // second moment of area in m^4  (8000e-8 = 8000 cm^4)
     cfg.A      = 60e-4;     // cross-section area in m^2  (60e-4 = 60 cm^2)
