@@ -7,12 +7,12 @@ BeamElement build_element(double E, double I, double A, double rho, double Le) {
     el.Ke = mat_zeros(6, 6);
     el.Me = mat_zeros(6, 6);
 
-    // --- Axial stiffness (DOFs 0 and 3) ---
+    // Axial stiffness (DOFs 0 and 3)
     double EA = E * A / Le;
     el.Ke[0][0] =  EA; el.Ke[0][3] = -EA;
     el.Ke[3][0] = -EA; el.Ke[3][3] =  EA;
 
-    // --- Bending stiffness (DOFs 1,2,4,5) ---
+    // Bending stiffness (DOFs 1,2,4,5) 
     double EI = E * I;
     double k  = EI / (Le*Le*Le);
     // [v1, t1, v2, t2] -> global indices [1,2,4,5]
@@ -27,7 +27,7 @@ BeamElement build_element(double E, double I, double A, double rho, double Le) {
         for (int j = 0; j < 4; j++)
             el.Ke[bi[i]][bi[j]] += k * kv[i][j];
 
-    // --- Consistent mass matrix ---
+    // Consistent mass matrix
     double rhoA = rho * A;
 
     // Axial mass (linear shape functions)
