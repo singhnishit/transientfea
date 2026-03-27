@@ -5,11 +5,7 @@
 #include <cmath>
 #include <iostream>
 
-// ============================================================
-//  PROBLEM DEFINITION
-//  Edit this section to set up your beam and loading.
-//  All other modules (assembly, solver, output) stay untouched.
-// ============================================================
+// define problem
 
 static constexpr double PI = M_PI;
 
@@ -21,31 +17,27 @@ BeamConfig make_beam() {
     cfg.I      = 8000e-8;       // 2nd moment of area [m^4]  (8000 cm^4)
     cfg.A      = 60e-4;         // cross-section area [m^2]  (60 cm^2)
     cfg.rho    = 7850.0;        // density [kg/m^3]
-    cfg.zeta   = 0.02;          // damping ratio (2%)
-    cfg.bc_left  = "fixed";     // "fixed" | "pinned" | "free"
-    cfg.bc_right = "free";      // cantilever: fixed left, free right
+    cfg.zeta   = 0.02;          // damping ratio
+    cfg.bc_left  = "fixed";     // fixed, pinned, free
+    cfg.bc_right = "free";      // fixed, pinned, free
     return cfg;
 }
 
 ForceConfig make_forces(const BeamConfig& cfg) {
     ForceConfig fc;
 
-    // --- Distributed transverse load q_y(x, t) [N/m] ---
-    // Oscillating uniform load: 1 kN/m * sin(2pi*t)
     fc.qy = [](double x, double t) -> double {
         (void)x;
         return 1000.0 * std::sin(2.0 * PI * t);
     };
 
-    // --- Distributed axial load q_x(x, t) [N/m] ---
-    // Zero by default
+    
     fc.qx = [](double x, double t) -> double {
         (void)x; (void)t;
         return 0.0;
     };
 
-    // --- Point forces ---
-    // Example: transient point force at the free tip, directed at 80 deg from axial
+    
     {
         PointForce pf;
         pf.x_fn     = [&cfg](double /*t*/) { return cfg.L; };         // at free end
@@ -54,15 +46,6 @@ ForceConfig make_forces(const BeamConfig& cfg) {
         fc.point_forces.push_back(pf);
     }
 
-    // Uncomment for a second moving force:
-    // {
-    //     PointForce pf;
-    //     pf.x_fn     = [&cfg](double t) { return 0.5 * cfg.L * (1 + std::sin(t)); };
-    //     pf.mag_fn   = [](double /*t*/) { return 3000.0; };
-    //     pf.angle_fn = [](double t) { return 90.0 - 30.0 * std::sin(t); };
-    //     fc.point_forces.push_back(pf);
-    // }
-
     return fc;
 }
 
@@ -70,15 +53,13 @@ SolverConfig make_solver_config() {
     SolverConfig sc;
     sc.t_start = 0.0;
     sc.t_end   = 2.0;   // [s]
-    sc.n_steps = 500;   // time steps (more = smoother, slower)
-    sc.beta    = 0.25;  // Newmark-beta (0.25 = unconditionally stable)
+    sc.n_steps = 500;   // time steps
+    sc.beta    = 0.25;  // Newmark-beta
     sc.gamma   = 0.5;   // Newmark-gamma
     return sc;
 }
 
-// ============================================================
-//  MAIN
-// ============================================================
+
 int main() {
     std::cout << "=== Beam FEA Transient Solver ===\n\n";
 
@@ -94,7 +75,7 @@ int main() {
     AssembledSystem sys     = assemble(beam_cfg);
     ForceConfig     forces  = make_forces(beam_cfg);
 
-    // Save every 2 steps -> ~250 frames for animation
+
     int save_every = std::max(1, sol_cfg.n_steps / 250);
     auto frames = newmark_solve(beam_cfg, sys, forces, sol_cfg, save_every);
 
